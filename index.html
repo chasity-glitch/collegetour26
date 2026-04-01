@@ -6,21 +6,18 @@
 <title>BRYC College Tour Tracker</title>
 <style>
   :root {
-    --green: #1B4332;
-    --green-light: #eaf2ec;
-    --green-mid: #c3ddc9;
-    --green-dark: #143326;
-    --gold: #B8860B;
-    --gold-light: #fdf6e3;
-    --gold-mid: #f0d080;
-    --amber: #92690a;
-    --amber-light: #fdf3dc;
-    --red: #b91c1c;
-    --red-light: #fef2f2;
-    --purple: #4a3f8f;
-    --purple-light: #eeecfb;
+    --teal: #00775f;
+    --teal-dark: #006b56;
+    --teal-light: #d3ebe7;
+    --teal-mid: #80bbaf;
+    --orange: #e06326;
+    --orange-light: #f6d0bb;
+    --orange-dark: #9e4723;
+    --violet: #3a3088;
+    --violet-light: #e2d7ea;
+    --violet-mid: #a99ecd;
+    --violet-dark: #282561;
     --gray-50: #f8f8f7;
-    --gray-100: #f0efed;
     --gray-200: #e0deda;
     --gray-400: #9e9b95;
     --gray-600: #5c5a55;
@@ -34,9 +31,9 @@
   #app { max-width: 500px; margin: 0 auto; padding-bottom: 40px; }
 
   /* TOP BAR */
-  .top-bar { background: var(--green); color: #fff; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
+  .top-bar { background: var(--teal-dark); color: #fff; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
   .top-bar-brand { display: flex; align-items: center; gap: 10px; }
-  .top-bar-logo { width: 28px; height: 28px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: var(--green); font-family: sans-serif; flex-shrink: 0; }
+  .top-bar-logo { width: 28px; height: 28px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #fff; font-family: sans-serif; flex-shrink: 0; }
   .top-bar-title { font-size: 16px; font-weight: bold; }
   .top-bar-sub { font-size: 11px; opacity: 0.75; margin-top: 1px; font-family: sans-serif; }
   .top-bar-back { background: rgba(255,255,255,0.15); border: none; color: #fff; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: sans-serif; }
@@ -44,18 +41,61 @@
   .screen { padding: 16px; }
 
   /* HERO */
-  .hero-card { background: var(--green); color: #fff; border-radius: var(--radius-lg); padding: 28px 16px 24px; margin-bottom: 20px; text-align: center; }
+  .hero-card { background: var(--teal-dark); color: #fff; border-radius: var(--radius-lg); padding: 28px 16px 24px; margin-bottom: 16px; text-align: center; }
   .hero-icon { font-size: 40px; margin-bottom: 10px; }
   .hero-title { font-size: 22px; font-weight: bold; margin-bottom: 6px; }
   .hero-sub { font-size: 14px; opacity: 0.8; font-family: sans-serif; line-height: 1.5; }
-  .hero-points { font-size: 60px; font-weight: bold; line-height: 1; color: var(--gold-mid); }
+  .hero-points { font-size: 60px; font-weight: bold; line-height: 1; color: var(--orange-light); }
   .hero-points-label { font-size: 14px; opacity: 0.8; margin-top: 6px; font-family: sans-serif; }
 
   /* CARDS */
   .card { background: #fff; border: 0.5px solid var(--gray-200); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
-  .card-green { background: var(--green-light); border-color: var(--green-mid); }
-  .card-gold  { background: var(--gold-light);  border-color: var(--gold-mid); }
-  .card-red   { background: var(--red-light);   border-color: #fca5a5; }
+  .card-teal   { background: var(--teal-light);   border-color: var(--teal-mid); }
+  .card-orange { background: #fdf0e8; border-color: var(--orange-light); }
+
+  /* HOME TABS */
+  .home-tabs { display: flex; border-bottom: 1px solid var(--gray-200); margin-bottom: 16px; }
+  .home-tab { flex: 1; padding: 10px 8px; border: none; border-bottom: 2px solid transparent; background: transparent; font-size: 13px; cursor: pointer; color: var(--gray-400); font-family: sans-serif; margin-bottom: -1px; text-align: center; }
+  .home-tab.active { color: var(--teal); border-bottom-color: var(--teal); font-weight: bold; }
+
+  /* CAMPUS CARDS */
+  .campus-card { background: #fff; border: 0.5px solid var(--gray-200); border-radius: var(--radius-lg); margin-bottom: 12px; box-shadow: var(--shadow); overflow: hidden; }
+  .campus-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px 12px; border-bottom: 0.5px solid var(--gray-200); }
+  .campus-logo { width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; font-family: sans-serif; flex-shrink: 0; }
+  .campus-name { font-size: 15px; font-weight: bold; line-height: 1.3; }
+  .campus-location { font-size: 12px; color: var(--gray-400); font-family: sans-serif; margin-top: 2px; }
+  .campus-hbcu { display: inline-block; font-size: 10px; font-weight: bold; font-family: sans-serif; padding: 2px 7px; border-radius: 20px; margin-top: 4px; background: var(--violet-light); color: var(--violet); border: 0.5px solid var(--violet-mid); }
+  .campus-body { padding: 12px 16px 14px; }
+  .campus-desc { font-size: 13px; color: var(--gray-600); line-height: 1.6; margin-bottom: 12px; font-family: sans-serif; }
+  .campus-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .campus-stat { background: var(--gray-50); border-radius: 8px; padding: 8px 10px; }
+  .campus-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-400); font-family: sans-serif; font-weight: bold; margin-bottom: 3px; }
+  .campus-stat-value { font-size: 14px; font-weight: bold; color: var(--gray-900); font-family: sans-serif; }
+  .campus-programs { margin-top: 10px; }
+  .campus-programs-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-400); font-family: sans-serif; font-weight: bold; margin-bottom: 6px; }
+  .campus-program-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .campus-pill { font-size: 11px; font-family: sans-serif; padding: 3px 10px; border-radius: 20px; background: var(--teal-light); color: var(--teal-dark); font-weight: bold; }
+
+  /* INFO TAB */
+  .info-day { margin-bottom: 20px; }
+  .info-day-header { background: var(--teal-dark); color: #fff; border-radius: var(--radius); padding: 10px 14px; font-size: 13px; font-weight: bold; font-family: sans-serif; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .info-event { display: flex; gap: 12px; padding: 8px 0; border-bottom: 0.5px solid var(--gray-200); align-items: flex-start; }
+  .info-event:last-child { border-bottom: none; }
+  .info-time { font-size: 12px; font-family: sans-serif; color: var(--teal); font-weight: bold; min-width: 80px; flex-shrink: 0; padding-top: 1px; }
+  .info-desc { font-size: 13px; font-family: sans-serif; color: var(--gray-900); line-height: 1.4; }
+  .info-highlight { font-weight: bold; color: var(--orange-dark); }
+
+  .pack-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .pack-item { font-size: 12px; font-family: sans-serif; color: var(--gray-600); padding: 5px 8px; background: var(--gray-50); border-radius: 6px; line-height: 1.3; }
+
+  .faq-item { margin-bottom: 14px; }
+  .faq-q { font-size: 14px; font-weight: bold; font-family: sans-serif; color: var(--teal-dark); margin-bottom: 4px; }
+  .faq-a { font-size: 13px; font-family: sans-serif; color: var(--gray-600); line-height: 1.5; }
+
+  .rule-item { display: flex; gap: 10px; padding: 6px 0; border-bottom: 0.5px solid var(--gray-200); align-items: flex-start; }
+  .rule-item:last-child { border-bottom: none; }
+  .rule-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); flex-shrink: 0; margin-top: 5px; }
+  .rule-text { font-size: 13px; font-family: sans-serif; color: var(--gray-600); line-height: 1.4; }
 
   /* METRICS */
   .metrics-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 16px; }
@@ -68,92 +108,88 @@
   /* FELLOW ROW */
   .fellow-row { display: flex; align-items: center; justify-content: space-between; }
   .fellow-info { display: flex; align-items: center; gap: 12px; }
-  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: var(--green); flex-shrink: 0; font-family: sans-serif; }
-  .avatar-pm { background: var(--gold-light); color: var(--gold); }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--teal-light); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: var(--teal-dark); flex-shrink: 0; font-family: sans-serif; }
+  .avatar-pm { background: var(--violet-light); color: var(--violet); }
   .fellow-name { font-size: 15px; font-weight: bold; }
   .fellow-meta { font-size: 12px; color: var(--gray-400); margin-top: 2px; font-family: sans-serif; }
 
   /* BADGES */
   .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: bold; font-family: sans-serif; }
-  .badge-auto     { background: var(--green-light); color: var(--green); }
-  .badge-pm       { background: var(--gold-light); color: var(--amber); }
-  .badge-pending  { background: var(--amber-light); color: var(--amber); }
-  .badge-approved { background: var(--green-light); color: var(--green); }
-  .badge-flagged  { background: var(--red-light); color: var(--red); }
+  .badge-auto     { background: var(--teal-light); color: var(--teal-dark); }
+  .badge-pm       { background: var(--violet-light); color: var(--violet); }
+  .badge-pending  { background: #fdf0e8; color: var(--orange-dark); }
+  .badge-approved { background: var(--teal-light); color: var(--teal-dark); }
+  .badge-flagged  { background: #fef2f2; color: #b91c1c; }
 
   /* FORM */
   .field-label { font-size: 12px; font-weight: bold; color: var(--gray-600); font-family: sans-serif; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: block; }
-
   select, input[type="text"], input[type="number"], input[type="password"], textarea {
     width: 100%; padding: 12px 14px; border: 1px solid var(--gray-200); border-radius: var(--radius);
     font-size: 16px; font-family: 'Georgia', serif; background: #fff; color: var(--gray-900);
     margin-bottom: 14px; appearance: none; -webkit-appearance: none;
   }
-  select:focus, input:focus, textarea:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(27,67,50,0.12); }
+  select:focus, input:focus, textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(0,119,95,0.12); }
   textarea { min-height: 90px; resize: vertical; }
 
   /* EMOJI RATING */
   .emoji-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px; }
   .emoji-option { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 8px; border: 2px solid var(--gray-200); border-radius: var(--radius-lg); cursor: pointer; background: #fff; gap: 6px; }
-  .emoji-option.selected { border-color: var(--green); background: var(--green-light); }
+  .emoji-option.selected { border-color: var(--teal); background: var(--teal-light); }
   .emoji-option:active { transform: scale(0.97); }
   .emoji-glyph { font-size: 28px; line-height: 1; }
   .emoji-label { font-size: 11px; font-family: sans-serif; font-weight: bold; color: var(--gray-600); text-align: center; line-height: 1.3; }
-  .emoji-option.selected .emoji-label { color: var(--green); }
+  .emoji-option.selected .emoji-label { color: var(--teal-dark); }
 
   /* BUTTONS */
-  .btn-primary { width: 100%; padding: 15px; background: var(--green); color: #fff; border: none; border-radius: var(--radius); font-size: 16px; font-weight: bold; font-family: 'Georgia', serif; cursor: pointer; margin-bottom: 10px; }
-  .btn-primary:active { background: var(--green-dark); }
+  .btn-primary { width: 100%; padding: 15px; background: var(--teal-dark); color: #fff; border: none; border-radius: var(--radius); font-size: 16px; font-weight: bold; font-family: 'Georgia', serif; cursor: pointer; margin-bottom: 10px; }
+  .btn-primary:active { background: var(--teal); }
+  .btn-orange { width: 100%; padding: 15px; background: var(--orange); color: #fff; border: none; border-radius: var(--radius); font-size: 16px; font-weight: bold; font-family: 'Georgia', serif; cursor: pointer; margin-bottom: 10px; }
+  .btn-orange:active { background: var(--orange-dark); }
   .btn-secondary { width: 100%; padding: 13px; background: transparent; color: var(--gray-600); border: 1px solid var(--gray-200); border-radius: var(--radius); font-size: 14px; font-family: sans-serif; cursor: pointer; margin-bottom: 8px; }
-  .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: #fff; border: none; border-radius: var(--radius); font-size: 16px; font-weight: bold; font-family: 'Georgia', serif; cursor: pointer; margin-bottom: 10px; }
-  .btn-sm-green { padding: 7px 14px; border: none; border-radius: 6px; background: var(--green); font-size: 13px; font-family: sans-serif; cursor: pointer; color: #fff; font-weight: bold; }
-  .btn-sm-red   { padding: 7px 14px; border: none; border-radius: 6px; background: var(--red); font-size: 13px; font-family: sans-serif; cursor: pointer; color: #fff; }
+  .btn-sm-teal  { padding: 7px 14px; border: none; border-radius: 6px; background: var(--teal-dark); font-size: 13px; font-family: sans-serif; cursor: pointer; color: #fff; font-weight: bold; }
+  .btn-sm-red   { padding: 7px 14px; border: none; border-radius: 6px; background: #b91c1c; font-size: 13px; font-family: sans-serif; cursor: pointer; color: #fff; }
   .btn-pair { display: flex; gap: 8px; }
   .btn-pair button { flex: 1; }
 
   /* CHECKBOX */
   .checkbox-row { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); cursor: pointer; margin-bottom: 10px; }
   .checkbox-box { width: 22px; height: 22px; border-radius: 5px; border: 1.5px solid var(--gray-400); background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-  .checkbox-box.checked { background: var(--green); border-color: var(--green); }
+  .checkbox-box.checked { background: var(--teal-dark); border-color: var(--teal-dark); }
   .checkbox-check { color: #fff; font-size: 14px; font-weight: bold; }
   .checkbox-label { font-size: 15px; font-weight: bold; line-height: 1.4; }
-  .checkbox-sub { font-size: 12px; color: var(--green); font-family: sans-serif; margin-top: 3px; font-weight: bold; }
+  .checkbox-sub { font-size: 12px; color: var(--teal); font-family: sans-serif; margin-top: 3px; font-weight: bold; }
 
   /* POINTS PREVIEW */
-  .points-preview { background: var(--green); color: #fff; border-radius: var(--radius); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; margin-top: 4px; }
+  .points-preview { background: var(--teal-dark); color: #fff; border-radius: var(--radius); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; margin-top: 4px; }
   .points-preview-label { font-size: 13px; opacity: 0.8; font-family: sans-serif; }
-  .points-preview-value { font-size: 22px; font-weight: bold; color: var(--gold-mid); }
+  .points-preview-value { font-size: 22px; font-weight: bold; color: var(--orange-light); }
 
   /* LOG */
   .log-entry { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-  .log-pts { font-size: 18px; font-weight: bold; color: var(--green); }
+  .log-pts { font-size: 18px; font-weight: bold; color: var(--teal-dark); }
   .log-cat { font-size: 13px; color: var(--gray-600); margin-top: 2px; font-family: sans-serif; }
   .log-campus { font-size: 12px; color: var(--gray-400); margin-top: 2px; font-family: sans-serif; }
   .log-note { font-size: 12px; color: var(--gray-400); font-style: italic; margin-top: 2px; font-family: sans-serif; }
   .log-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
 
-  /* TABS */
+  /* TABS (PM) */
   .tab-bar { display: flex; border-bottom: 1px solid var(--gray-200); margin-bottom: 16px; }
   .tab { padding: 10px 16px; border: none; border-bottom: 2px solid transparent; background: transparent; font-size: 14px; cursor: pointer; color: var(--gray-400); font-family: sans-serif; margin-bottom: -1px; }
-  .tab.active { color: var(--green); border-bottom-color: var(--green); font-weight: bold; }
+  .tab.active { color: var(--teal); border-bottom-color: var(--teal); font-weight: bold; }
 
   .divider { border-top: 0.5px solid var(--gray-200); margin: 12px 0; }
 
-  /* NOTICES */
   .notice { border-radius: var(--radius); padding: 12px 14px; margin-bottom: 12px; font-size: 14px; font-family: sans-serif; line-height: 1.5; }
-  .notice-green { background: var(--green-light); color: var(--green); border: 0.5px solid var(--green-mid); }
-  .notice-red   { background: var(--red-light); color: var(--red); border: 0.5px solid #fca5a5; }
+  .notice-teal { background: var(--teal-light); color: var(--teal-dark); border: 0.5px solid var(--teal-mid); }
+  .notice-red  { background: #fef2f2; color: #b91c1c; border: 0.5px solid #fca5a5; }
 
-  /* AWARD FORM */
   .award-section { background: var(--gray-50); border: 0.5px solid var(--gray-200); border-radius: var(--radius-lg); padding: 16px; margin-top: 12px; }
   .award-title { font-size: 14px; font-weight: bold; margin-bottom: 14px; color: var(--gray-900); font-family: sans-serif; }
 
-  /* REFLECTION DETAIL */
   .refl-field-label { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-400); font-family: sans-serif; margin-bottom: 4px; }
   .refl-field-value { font-size: 14px; color: var(--gray-900); margin-bottom: 12px; line-height: 1.6; }
   .refl-rating { font-size: 18px; margin-bottom: 12px; }
 
-  /* PM LINK */
   .pm-link { text-align: center; margin-top: 28px; padding-top: 20px; border-top: 0.5px solid var(--gray-200); }
   .pm-link-btn { background: none; border: none; font-size: 12px; color: var(--gray-400); cursor: pointer; font-family: sans-serif; text-decoration: underline; padding: 4px; }
 
@@ -164,11 +200,132 @@
 <body>
 <div id="app"></div>
 <script>
+
 /* ============================================================
-   FELLOW ROSTER
-   Replace these placeholder names with actual Fellow names.
-   Format: "First Last" -- one name per line, comma at end.
-   Remove or add lines as needed.
+   CAMPUS DATA
+============================================================ */
+const CAMPUS_DATA = [
+  {
+    name: "University of Houston",
+    short: "UH",
+    location: "Houston, TX",
+    hbcu: false,
+    color: "#C8102E",
+    textColor: "#fff",
+    desc: "A large public research university in the heart of Houston with strong programs in engineering, business, law, and the arts. One of the most diverse universities in the nation.",
+    stats: { enrollment: "47,980", acceptance: "74%", avgACT: "26", website: "uh.edu" },
+    programs: ["Engineering", "Business", "Law", "Education", "Medicine", "Arts"],
+  },
+  {
+    name: "Prairie View A&M University",
+    short: "PVAMU",
+    location: "Prairie View, TX",
+    hbcu: true,
+    color: "#4F2D7F",
+    textColor: "#fff",
+    desc: "A proud HBCU and the second-oldest public institution in Texas. Strong in engineering, nursing, business, and agriculture. Known for tight-knit community and the Marching Storm band.",
+    stats: { enrollment: "9,922", acceptance: "79%", avgACT: "19", website: "pvamu.edu" },
+    programs: ["Engineering", "Nursing", "Business", "Agriculture", "Education", "Architecture"],
+  },
+  {
+    name: "Texas Southern University",
+    short: "TSU",
+    location: "Houston, TX",
+    hbcu: true,
+    color: "#4A1942",
+    textColor: "#fff",
+    desc: "An HBCU in Houston's Third Ward with strong programs in law, pharmacy, business, and communication. Home to the Thurgood Marshall School of Law.",
+    stats: { enrollment: "8,704", acceptance: "97%", avgACT: "17", website: "tsu.edu" },
+    programs: ["Law", "Pharmacy", "Business", "Communication", "Education", "STEM"],
+  },
+  {
+    name: "Texas A&M University",
+    short: "TAMU",
+    location: "College Station, TX",
+    hbcu: false,
+    color: "#500000",
+    textColor: "#fff",
+    desc: "One of the largest universities in the US and a flagship Texas institution. Known for engineering, agriculture, and business. Strong traditions and a global alumni network.",
+    stats: { enrollment: "78,321", acceptance: "57%", avgACT: "28", website: "tamu.edu" },
+    programs: ["Engineering", "Agriculture", "Business", "Architecture", "Veterinary", "Liberal Arts"],
+  },
+];
+
+/* ============================================================
+   ITINERARY DATA
+============================================================ */
+const ITINERARY = [
+  {
+    day: "Monday, April 6",
+    emoji: "&#128652;",
+    events: [
+      { time: "6:10 am", desc: "Fellows arrive at BRYC", highlight: false },
+      { time: "6:30 am", desc: "Bus departs BRYC", highlight: true },
+      { time: "11:00 am", desc: "Lunch & tour at University of Houston", highlight: true },
+      { time: "4:00 pm", desc: "Fun at Urban Air Trampoline Park", highlight: false },
+      { time: "6:30 pm", desc: "Dinner at Golden Corral", highlight: false },
+      { time: "8:30 pm", desc: "Check-in at La Quinta Inn & Suites, Houston Cypress", highlight: false },
+      { time: "10:00 pm", desc: "Room checks & lights out", highlight: true },
+    ]
+  },
+  {
+    day: "Tuesday, April 7",
+    emoji: "&#127979;",
+    events: [
+      { time: "6:45 am", desc: "Breakfast at hotel", highlight: false },
+      { time: "9:30 am", desc: "Tour Texas A&M followed by lunch", highlight: true },
+      { time: "12:30 pm", desc: "Tour Prairie View A&M University", highlight: true },
+      { time: "3:00 pm", desc: "Visit Bu-cee's", highlight: false },
+      { time: "4:30 pm", desc: "Fun at Dave & Busters", highlight: false },
+      { time: "8:15 pm", desc: "Return to hotel", highlight: false },
+      { time: "9:15 pm", desc: "Room checks & lights out", highlight: true },
+    ]
+  },
+  {
+    day: "Wednesday, April 8",
+    emoji: "&#127968;",
+    events: [
+      { time: "7:00 am", desc: "Breakfast at hotel (bring bags for checkout)", highlight: false },
+      { time: "8:15 am", desc: "Leave hotel", highlight: false },
+      { time: "10:00 am", desc: "Tour Texas Southern University followed by lunch", highlight: true },
+      { time: "12:45 pm", desc: "Depart for BRYC Downtown, Baton Rouge", highlight: true },
+      { time: "5:30 pm", desc: "Arrival at BRYC Downtown. Chick-fil-A for dinner", highlight: false },
+    ]
+  },
+];
+
+const PACKING_LIST = [
+  "Lightweight layerable clothing", "T-shirts", "Pants and/or shorts", "Hoodie/jacket",
+  "Socks", "Comfortable walking shoes", "Rain jacket or umbrella", "Pajamas/sleepwear",
+  "Underwear", "Sunglasses + case", "Hat or sun visor", "Toothbrush & toothpaste",
+  "Floss & mouthwash", "Hair brush/comb & ties", "Deodorant", "Face wash & wipes",
+  "Moisturizer/lotion", "Lip balm with SPF", "Personal hygiene items", "Contacts & solution",
+  "Glasses", "Prescription medication", "Hair products", "Books or magazines",
+  "Cell phone & charger", "Portable charger", "Headphones", "Snacks for the bus",
+  "Travel pillow & blanket", "Pens or pencils", "Small backpack for tours",
+];
+
+const TRIP_RULES = [
+  "Always follow the directions of chaperones and BRYC team promptly.",
+  "Always leave any area you enter in better shape than you found it.",
+  "Always travel with at least one other Fellow -- this includes going to the restroom.",
+  "Do not engage in inappropriate contact with one another, in public or in private.",
+  "Never be in a person's room who is not traveling with BRYC.",
+  "Never leave your room after room checks have been completed.",
+  "Only be in your assigned room. Hotels have common areas downstairs.",
+];
+
+const FAQS = [
+  { q: "What time are we leaving from BRYC?", a: "At EXACTLY 6:30 AM. We will not wait if you are late." },
+  { q: "Do I have to give my medication to the BRYC team?", a: "Yes. Fellows taking medication need to turn medicines into a BRYC team member to hold and distribute." },
+  { q: "How big should my bag be?", a: "About the size of a duffle bag." },
+  { q: "How many people per room?", a: "Four people per room." },
+  { q: "How much money should I bring?", a: "All meals are covered. If time permits, we may stop at campus bookstores where you can buy souvenirs." },
+  { q: "Will there be bathroom/stretch breaks?", a: "Yes, we will take short breaks on our way to Houston and back. The bus also has a bathroom." },
+];
+
+/* ============================================================
+   FELLOW ROSTER -- replace with actual names
 ============================================================ */
 const FELLOWS_LIST = [
   "Fellow Name 1",
@@ -183,28 +340,14 @@ const FELLOWS_LIST = [
   "Fellow Name 10",
 ];
 
-/* ============================================================
-   CAMPUSES -- confirmed for this tour
-============================================================ */
-const CAMPUSES = [
-  "University of Houston",
-  "Texas A&M University",
-  "Prairie View A&M University",
-  "Texas Southern University",
-];
+const CAMPUSES = CAMPUS_DATA.map(c => c.name);
 
-/* ============================================================
-   EMOJI RATING OPTIONS
-============================================================ */
 const RATINGS = [
   { value: "not-for-me", emoji: "😐", label: "Not for me" },
   { value: "maybe",      emoji: "🤔", label: "Maybe" },
   { value: "yes",        emoji: "🙌", label: "I can see myself here" },
 ];
 
-/* ============================================================
-   POINT VALUES -- adjust here if needed
-============================================================ */
 const POINTS = { reflection: 20, question: 15, notes_max: 20, bonus_max: 25 };
 
 const PM_CATEGORIES = [
@@ -212,9 +355,6 @@ const PM_CATEGORIES = [
   { key: "bonus", label: "Bonus / exceptional engagement", max: POINTS.bonus_max },
 ];
 
-/* ============================================================
-   PM PASSWORD
-============================================================ */
 const PM_PASSWORD = "HTXbryc";
 
 /* ============================================================
@@ -223,6 +363,7 @@ const PM_PASSWORD = "HTXbryc";
 let state = {
   fellows: FELLOWS_LIST.map((name, i) => ({ id: i+1, name, points: 0, log: [], reflections: [] })),
   view: "home",
+  homeTab: "campuses",
   selectedId: null,
   pmTab: "fellows",
   awardingId: null,
@@ -280,7 +421,76 @@ function render() {
   bindEvents();
 }
 
-/* HOME */
+/* ============================================================
+   CAMPUS CARDS
+============================================================ */
+function renderCampusCards() {
+  return CAMPUS_DATA.map(c => `
+    <div class="campus-card">
+      <div class="campus-header">
+        <div class="campus-logo" style="background:${c.color};color:${c.textColor};">${c.short}</div>
+        <div>
+          <div class="campus-name">${c.name}</div>
+          <div class="campus-location">&#128205; ${c.location}</div>
+          ${c.hbcu ? `<span class="campus-hbcu">HBCU</span>` : ""}
+        </div>
+      </div>
+      <div class="campus-body">
+        <div class="campus-desc">${c.desc}</div>
+        <div class="campus-stats">
+          <div class="campus-stat"><div class="campus-stat-label">Enrollment</div><div class="campus-stat-value">${c.stats.enrollment}</div></div>
+          <div class="campus-stat"><div class="campus-stat-label">Acceptance rate</div><div class="campus-stat-value">${c.stats.acceptance}</div></div>
+          <div class="campus-stat"><div class="campus-stat-label">Avg ACT</div><div class="campus-stat-value">${c.stats.avgACT}</div></div>
+          <div class="campus-stat"><div class="campus-stat-label">Website</div><div class="campus-stat-value" style="font-size:12px;">${c.stats.website}</div></div>
+        </div>
+        <div class="campus-programs">
+          <div class="campus-programs-label">Key programs</div>
+          <div class="campus-program-pills">${c.programs.map(p => `<span class="campus-pill">${p}</span>`).join("")}</div>
+        </div>
+      </div>
+    </div>`).join("");
+}
+
+/* ============================================================
+   INFO TAB
+============================================================ */
+function renderInfoTab() {
+  const itineraryHTML = ITINERARY.map(day => `
+    <div class="info-day">
+      <div class="info-day-header">${day.emoji} ${day.day}</div>
+      <div class="card" style="padding:8px 14px;">
+        ${day.events.map(e => `
+          <div class="info-event">
+            <div class="info-time">${e.time}</div>
+            <div class="info-desc ${e.highlight ? "info-highlight" : ""}">${e.desc}</div>
+          </div>`).join("")}
+      </div>
+    </div>`).join("");
+
+  const packingHTML = `<div class="pack-grid">${PACKING_LIST.map(item => `<div class="pack-item">&#9744; ${item}</div>`).join("")}</div>`;
+
+  const rulesHTML = `<div class="card" style="padding:10px 14px;">${TRIP_RULES.map(r => `<div class="rule-item"><div class="rule-dot"></div><div class="rule-text">${r}</div></div>`).join("")}</div>`;
+
+  const faqHTML = FAQS.map(f => `<div class="faq-item"><div class="faq-q">&#9656; ${f.q}</div><div class="faq-a">${f.a}</div></div>`).join("");
+
+  return `
+    <div class="section-header">&#128197; Itinerary</div>
+    ${itineraryHTML}
+    <div class="section-header">&#127890; Packing list</div>
+    <div class="card">${packingHTML}</div>
+    <div class="section-header">&#128221; Trip expectations</div>
+    <div class="card card-orange" style="font-family:sans-serif;font-size:13px;color:var(--orange-dark);margin-bottom:8px;padding:12px 14px;line-height:1.6;">
+      BRYC trips are a privilege. Any misconduct, disrespect, or violation of a rule can result in immediate dismissal from the trip and expulsion from the BRYC program.
+    </div>
+    ${rulesHTML}
+    <div class="section-header">&#10067; FAQs</div>
+    <div class="card">${faqHTML}</div>
+  `;
+}
+
+/* ============================================================
+   HOME
+============================================================ */
 function renderHome() {
   return `
     <div class="top-bar">
@@ -288,33 +498,64 @@ function renderHome() {
         <div class="top-bar-logo">B</div>
         <div>
           <div class="top-bar-title">BRYC College Tour</div>
-          <div class="top-bar-sub">April 6 - 8, 2025 &middot; Houston, TX</div>
+          <div class="top-bar-sub">April 6 - 8, 2026 &middot; Houston, TX</div>
         </div>
       </div>
     </div>
     <div class="screen">
       <div class="hero-card">
         <div class="hero-icon">&#127891;</div>
-        <div class="hero-title">College Tour Tracker</div>
+        <div class="hero-title">Houston College Tour</div>
         <div class="hero-sub">Earn points, take notes, and track your journey.</div>
       </div>
-      <div class="card">
-        <label class="field-label">Find your page</label>
-        <select id="home-fellow">
-          <option value="">Select your name...</option>
-          ${state.fellows.map(f => `<option value="${f.id}">${f.name}</option>`).join("")}
-        </select>
-        <button class="btn-primary" data-action="go-fellow" style="margin-bottom:0;">Go to my page</button>
+
+      <div class="home-tabs">
+        <button class="home-tab ${state.homeTab==="campuses"?"active":""}" data-action="home-tab" data-tab="campuses">&#127979; Campuses</button>
+        <button class="home-tab ${state.homeTab==="tracker"?"active":""}"  data-action="home-tab" data-tab="tracker">&#11088; My tracker</button>
+        <button class="home-tab ${state.homeTab==="info"?"active":""}"     data-action="home-tab" data-tab="info">&#128197; Trip info</button>
       </div>
-      <button class="btn-gold" data-action="go-submit">Submit a reflection</button>
-      <div class="pm-link">
-        <button class="pm-link-btn" data-action="go-pm-auth">Program Manager access</button>
-      </div>
+
+      ${state.homeTab === "campuses" ? renderCampusCards() : ""}
+
+      ${state.homeTab === "tracker" ? `
+        <div class="card">
+          <label class="field-label">Find your page</label>
+          <select id="home-fellow">
+            <option value="">Select your name...</option>
+            ${state.fellows.map(f => `<option value="${f.id}">${f.name}</option>`).join("")}
+          </select>
+          <button class="btn-primary" data-action="go-fellow" style="margin-bottom:0;">Go to my page</button>
+        </div>
+        <button class="btn-orange" data-action="go-submit">Submit a reflection</button>
+        <div class="pm-link">
+          <button class="pm-link-btn" data-action="go-pm-auth">Program Manager access</button>
+        </div>
+      ` : ""}
+
+      ${state.homeTab === "info" ? renderInfoTab() : ""}
+
+      ${state.homeTab === "campuses" ? `
+        <div style="height:8px;"></div>
+        <button class="btn-orange" data-action="go-submit">Submit a reflection</button>
+        <div class="card" style="margin-top:4px;">
+          <label class="field-label">Find your page</label>
+          <select id="home-fellow-bottom">
+            <option value="">Select your name...</option>
+            ${state.fellows.map(f => `<option value="${f.id}">${f.name}</option>`).join("")}
+          </select>
+          <button class="btn-primary" data-action="go-fellow-bottom" style="margin-bottom:0;">Go to my page</button>
+        </div>
+        <div class="pm-link">
+          <button class="pm-link-btn" data-action="go-pm-auth">Program Manager access</button>
+        </div>
+      ` : ""}
     </div>
   `;
 }
 
-/* FELLOW PAGE */
+/* ============================================================
+   FELLOW PAGE
+============================================================ */
 function renderFellowPage() {
   const f = state.fellows.find(x => x.id === state.selectedId);
   if (!f) return "";
@@ -384,7 +625,7 @@ function renderFellowPage() {
         <div class="hero-points">${f.points}</div>
         <div class="hero-points-label">BRYC points earned</div>
       </div>
-      <button class="btn-gold" data-action="go-submit-prefilled" data-id="${f.id}">Submit a reflection</button>
+      <button class="btn-orange" data-action="go-submit-prefilled" data-id="${f.id}">Submit a reflection</button>
       <div class="section-header">Points log</div>
       ${logHTML}
       ${reflHTML}
@@ -392,7 +633,9 @@ function renderFellowPage() {
   `;
 }
 
-/* SUBMIT */
+/* ============================================================
+   SUBMIT
+============================================================ */
 function renderSubmit() {
   const autoTotal = POINTS.reflection + (state.submitAskedQ ? POINTS.question : 0);
   return `
@@ -404,7 +647,6 @@ function renderSubmit() {
     </div>
     <div class="screen">
       ${state.submitError ? `<div class="notice notice-red">${state.submitError}</div>` : ""}
-
       <div class="card">
         <label class="field-label">Your name</label>
         <select id="sub-fellow">
@@ -417,12 +659,10 @@ function renderSubmit() {
           ${CAMPUSES.map(c => `<option value="${c}" ${state.submitCampus === c ? "selected" : ""}>${c}</option>`).join("")}
         </select>
       </div>
-
       <div class="card">
         <label class="field-label">Your notes from the tour</label>
         <textarea id="sub-notes" style="margin-bottom:0;" placeholder="What did you see, hear, or learn on this tour?">${state.submitNotes}</textarea>
       </div>
-
       <div class="card">
         <label class="field-label">How do you feel about this campus?</label>
         <div class="emoji-row">
@@ -435,12 +675,10 @@ function renderSubmit() {
         <label class="field-label">Tell us about what made you feel that way</label>
         <textarea id="sub-vibe" style="margin-bottom:0;" placeholder="What stood out to you? What felt right or off?">${state.submitVibeText}</textarea>
       </div>
-
       <div class="card">
         <label class="field-label">One key takeaway</label>
         <textarea id="sub-takeaway" style="min-height:70px;margin-bottom:0;" placeholder="What's the most important thing you're taking away from this visit?">${state.submitTakeaway}</textarea>
       </div>
-
       <div class="checkbox-row" data-action="toggle-question">
         <div class="checkbox-box ${state.submitAskedQ ? "checked" : ""}">
           ${state.submitAskedQ ? `<span class="checkbox-check">&#10003;</span>` : ""}
@@ -450,26 +688,25 @@ function renderSubmit() {
           <div class="checkbox-sub">+${POINTS.question} pts awarded automatically</div>
         </div>
       </div>
-
       ${state.submitAskedQ ? `
         <div class="card">
           <label class="field-label">What was your question?</label>
           <textarea id="sub-question" style="min-height:60px;margin-bottom:0;" placeholder="Write out the question you asked...">${state.submitQuestionText}</textarea>
         </div>
       ` : ""}
-
       <div class="points-preview">
         <div class="points-preview-label">Points you'll earn</div>
         <div class="points-preview-value">+${autoTotal} pts</div>
       </div>
-
       <button class="btn-primary" data-action="submit-reflection">Submit reflection</button>
       <button class="btn-secondary" data-action="go-back-from-submit">Cancel</button>
     </div>
   `;
 }
 
-/* SUBMIT DONE */
+/* ============================================================
+   SUBMIT DONE
+============================================================ */
 function renderSubmitDone() {
   return `
     <div class="top-bar">
@@ -484,10 +721,10 @@ function renderSubmitDone() {
         <div class="hero-title">You're all set!</div>
         <div class="hero-sub">Points have been added to your account. Keep it up!</div>
       </div>
-      <div class="card card-green" style="font-family:sans-serif;">
-        <div style="font-size:14px;font-weight:bold;color:var(--green);margin-bottom:8px;">Points earned this submission</div>
-        <div style="font-size:13px;color:var(--green);">+${POINTS.reflection} pts &mdash; Reflection submitted</div>
-        ${state._lastAskedQ ? `<div style="font-size:13px;color:var(--green);margin-top:6px;">+${POINTS.question} pts &mdash; Asked a question on tour</div>` : ""}
+      <div class="card card-teal" style="font-family:sans-serif;">
+        <div style="font-size:14px;font-weight:bold;color:var(--teal-dark);margin-bottom:8px;">Points earned this submission</div>
+        <div style="font-size:13px;color:var(--teal-dark);">+${POINTS.reflection} pts &mdash; Reflection submitted</div>
+        ${state._lastAskedQ ? `<div style="font-size:13px;color:var(--teal-dark);margin-top:6px;">+${POINTS.question} pts &mdash; Asked a question on tour</div>` : ""}
       </div>
       <button class="btn-primary" data-action="go-home">Back to home</button>
       ${state._lastSubmittedFellowId ? `<button class="btn-secondary" data-action="go-fellow-after-submit" data-id="${state._lastSubmittedFellowId}">View my points page</button>` : ""}
@@ -495,7 +732,9 @@ function renderSubmitDone() {
   `;
 }
 
-/* PM AUTH */
+/* ============================================================
+   PM AUTH
+============================================================ */
 function renderPMAuth() {
   return `
     <div class="top-bar">
@@ -520,7 +759,9 @@ function renderPMAuth() {
   `;
 }
 
-/* PM DASHBOARD */
+/* ============================================================
+   PM DASHBOARD
+============================================================ */
 function renderPM() {
   const sorted  = [...state.fellows].sort((a,b) => b.points - a.points);
   const pending = state.fellows.flatMap(f =>
@@ -540,7 +781,7 @@ function renderPM() {
               <div class="fellow-meta">${f.reflections.length} reflection${f.reflections.length!==1?"s":""} &middot; ${f.points} pts</div>
             </div>
           </div>
-          <button class="btn-sm-green" data-action="toggle-award" data-id="${f.id}">${isAwarding ? "Cancel" : "+ pts"}</button>
+          <button class="btn-sm-teal" data-action="toggle-award" data-id="${f.id}">${isAwarding ? "Cancel" : "+ pts"}</button>
         </div>
         ${isAwarding ? `
           <div class="award-section">
@@ -588,8 +829,8 @@ function renderPM() {
               <div class="refl-field-value">${r.questionText}</div>
             ` : ""}
             <div class="btn-pair" style="margin-top:10px;">
-              <button class="btn-sm-green" data-action="approve-refl" data-fellow="${r.fellowId}" data-idx="${r.refIdx}">Approve</button>
-              <button class="btn-sm-red"   data-action="flag-refl"    data-fellow="${r.fellowId}" data-idx="${r.refIdx}">Flag</button>
+              <button class="btn-sm-teal" data-action="approve-refl" data-fellow="${r.fellowId}" data-idx="${r.refIdx}">Approve</button>
+              <button class="btn-sm-red"  data-action="flag-refl"    data-fellow="${r.fellowId}" data-idx="${r.refIdx}">Flag</button>
             </div>
           </div>`;
       }).join("");
@@ -605,11 +846,11 @@ function renderPM() {
       </div>
     </div>
     <div class="screen">
-      ${state.pmSuccess ? `<div class="notice notice-green">${state.pmSuccess}</div>` : ""}
+      ${state.pmSuccess ? `<div class="notice notice-teal">${state.pmSuccess}</div>` : ""}
       <div class="metrics-grid">
         <div class="metric"><div class="metric-label">Fellows</div><div class="metric-value">${state.fellows.length}</div></div>
         <div class="metric"><div class="metric-label">Total pts</div><div class="metric-value">${state.fellows.reduce((a,f)=>a+f.points,0)}</div></div>
-        <div class="metric"><div class="metric-label">Pending</div><div class="metric-value" style="${pending.length>0?"color:var(--gold);":""}">${pending.length}</div></div>
+        <div class="metric"><div class="metric-label">Pending</div><div class="metric-value" style="${pending.length>0?"color:var(--orange);":""}">${pending.length}</div></div>
       </div>
       <div class="tab-bar">
         <button class="tab ${state.pmTab==="fellows"?"active":""}"     data-action="pm-tab" data-tab="fellows">Fellows</button>
@@ -621,13 +862,15 @@ function renderPM() {
 }
 
 /* ============================================================
-   EVENT BINDING
+   EVENTS
 ============================================================ */
 function bindEvents() {
   document.querySelectorAll("[data-action]").forEach(el => el.addEventListener("click", handleAction));
 
-  const homeFellow = document.getElementById("home-fellow");
-  if (homeFellow) homeFellow.addEventListener("change", e => { state._homeFellowId = e.target.value; });
+  ["home-fellow","home-fellow-bottom"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("change", e => { state._homeFellowId = e.target.value; });
+  });
 
   const subFellow = document.getElementById("sub-fellow");
   if (subFellow) subFellow.addEventListener("change", e => { state.submitFellowId = e.target.value; });
@@ -684,10 +927,11 @@ function handleAction(e) {
   if (action === "go-pm-auth")      setState({ view:"pm-auth", pmPasswordInput:"", pmError:"" });
   if (action === "submit-pm-auth")  handlePMAuth();
   if (action === "pm-tab")          setState({ pmTab: el.dataset.tab });
+  if (action === "home-tab")        setState({ homeTab: el.dataset.tab });
   if (action === "set-rating")      setState({ submitRating: el.dataset.value });
   if (action === "toggle-question") setState({ submitAskedQ: !state.submitAskedQ, submitQuestionText: "" });
 
-  if (action === "go-fellow") {
+  if (action === "go-fellow" || action === "go-fellow-bottom") {
     if (!state._homeFellowId) return;
     setState({ view:"fellow", selectedId: Number(state._homeFellowId) });
   }
