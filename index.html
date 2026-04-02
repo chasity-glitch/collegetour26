@@ -323,9 +323,16 @@ function renderHome(){
 
       ${state.homeTab==="colleges" ? `
         <div class="section-header">&#128196; Pre-trip forms</div>
-        <div class="form-embed">
-          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeyftsd0eVGhflDvvrIdp9FMNS3MDt443gumAmzi3gyBnQBPw/viewform?embedded=true" title="BRYC Pre-Trip Forms">Loading...</iframe>
-        </div>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeyftsd0eVGhflDvvrIdp9FMNS3MDt443gumAmzi3gyBnQBPw/viewform" target="_blank" style="text-decoration:none;display:block;margin-bottom:16px;">
+          <div style="background:var(--orange);color:#fff;border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;gap:12px;font-family:var(--font);">
+            <span style="font-size:20px;">&#128196;</span>
+            <div>
+              <div style="font-size:15px;font-weight:800;letter-spacing:0.02em;">Complete pre-trip forms</div>
+              <div style="font-size:12px;opacity:0.85;margin-top:2px;font-weight:400;">Required before departure &middot; Opens in browser</div>
+            </div>
+            <span style="margin-left:auto;font-size:18px;opacity:0.8;">&#8599;</span>
+          </div>
+        </a>
         <div class="section-header">&#127979; Our colleges</div>
         ${renderCampusCards()}
       ` : ""}
