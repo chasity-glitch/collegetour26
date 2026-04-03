@@ -58,9 +58,32 @@ body { font-family: var(--font); background: var(--gray-50); color: var(--gray-9
 .hero-points-label { font-size: 13px; opacity: 0.85; margin-top: 6px; font-weight: 400; }
 .card { background: #fff; border: 0.5px solid var(--gray-200); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
 .card-orange { background: var(--orange-pale); border-color: var(--orange-border); }
-.home-tabs { display: flex; border-bottom: 1px solid var(--gray-200); margin-bottom: 16px; }
-.home-tab { flex: 1; padding: 10px 4px; border: none; border-bottom: 2px solid transparent; background: transparent; font-size: 12px; cursor: pointer; color: var(--gray-400); font-family: var(--font); font-weight: 700; margin-bottom: -1px; text-align: center; letter-spacing: 0.02em; }
+.home-tabs { display: flex; border-bottom: 1px solid var(--gray-200); margin-bottom: 16px; overflow-x: auto; }
+.home-tab { flex: 1; padding: 10px 4px; border: none; border-bottom: 2px solid transparent; background: transparent; font-size: 12px; cursor: pointer; color: var(--gray-400); font-family: var(--font); font-weight: 700; margin-bottom: -1px; text-align: center; letter-spacing: 0.02em; white-space: nowrap; }
 .home-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+.slides-embed { position: relative; width: 100%; padding-top: 56.25%; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 16px; box-shadow: var(--shadow); border: 0.5px solid var(--gray-200); }
+.slides-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+.campus-cards-grid { display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 700px) {
+  #app { max-width: 960px; }
+  .screen { padding: 24px 32px; }
+  .campus-cards-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .campus-cards-grid .campus-card { margin-bottom: 0; }
+  .campus-stats { grid-template-columns: repeat(4,1fr); }
+  .home-tab { font-size: 13px; padding: 10px 16px; }
+  .hero-card { padding: 40px 32px 32px; }
+  .hero-title { font-size: 28px; }
+  .hero-points { font-size: 72px; }
+  .hero-sub { font-size: 15px; }
+  .top-bar { padding: 14px 32px; }
+  .top-bar-title { font-size: 18px; }
+  .top-bar-sub { font-size: 13px; }
+  .top-bar-logo { width: 42px; height: 42px; }
+  .card { padding: 20px 24px; }
+  .btn-primary { font-size: 16px; padding: 16px; }
+  .metric-value { font-size: 32px; }
+  .pack-grid { grid-template-columns: repeat(3,1fr); }
+}
 .campus-card { background: #fff; border: 0.5px solid var(--gray-200); border-radius: var(--radius-lg); margin-bottom: 14px; box-shadow: var(--shadow); overflow: hidden; }
 .campus-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px 12px; border-bottom: 0.5px solid var(--gray-200); }
 .campus-logo { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; font-family: var(--font); flex-shrink: 0; text-align: center; line-height: 1.2; letter-spacing: 0.02em; }
@@ -248,7 +271,7 @@ const POINTS={reflection:20,question:15,notes_max:20,bonus_max:25};
 const PM_CATEGORIES=[{key:"notes",label:"Notes quality",max:POINTS.notes_max},{key:"bonus",label:"Bonus / exceptional engagement",max:POINTS.bonus_max}];
 const PM_PASSWORD="HTXbryc";
 
-let state={fellows:FELLOWS_LIST.map((name,i)=>({id:i+1,name,points:0,log:[],reflections:[]})),view:"home",homeTab:"colleges",selectedId:null,pmTab:"fellows",awardingId:null,awardCat:"notes",awardPts:10,awardCampus:CAMPUSES[0],awardNote:"",pmSuccess:"",pmError:"",pmPasswordInput:"",submitFellowId:"",submitCampus:"",submitNotes:"",submitRating:"",submitVibeText:"",submitTakeaway:"",submitAskedQ:false,submitQuestionText:"",submitError:"",_fromFellowId:null,_lastAskedQ:false,_lastSubmittedFellowId:null,_homeFellowId:""};
+let state={fellows:FELLOWS_LIST.map((name,i)=>({id:i+1,name,points:0,log:[],reflections:[]})),view:"home",homeTab:"recap",selectedId:null,pmTab:"fellows",awardingId:null,awardCat:"notes",awardPts:10,awardCampus:CAMPUSES[0],awardNote:"",pmSuccess:"",pmError:"",pmPasswordInput:"",submitFellowId:"",submitCampus:"",submitNotes:"",submitRating:"",submitVibeText:"",submitTakeaway:"",submitAskedQ:false,submitQuestionText:"",submitError:"",_fromFellowId:null,_lastAskedQ:false,_lastSubmittedFellowId:null,_homeFellowId:""};
 
 function setState(u){Object.assign(state,u);render();}
 function awardPoints(fid,pts,category,campus,note,auto){const f=state.fellows.find(x=>x.id===fid);if(!f)return;f.points+=pts;f.log.unshift({pts,category,campus,note,auto,ts:new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})});}
@@ -316,25 +339,15 @@ function renderHome(){
     </div>
     <div class="screen">
       <div class="home-tabs">
+        <button class="home-tab ${state.homeTab==="recap"?"active":""}" data-action="home-tab" data-tab="recap">&#127908; Pre-Trip</button>
+        <button class="home-tab ${state.homeTab==="info"?"active":""}" data-action="home-tab" data-tab="info">&#128197; Info</button>
         <button class="home-tab ${state.homeTab==="colleges"?"active":""}" data-action="home-tab" data-tab="colleges">&#127979; Colleges</button>
-        <button class="home-tab ${state.homeTab==="tracker"?"active":""}" data-action="home-tab" data-tab="tracker">&#11088; My tracker</button>
-        <button class="home-tab ${state.homeTab==="info"?"active":""}" data-action="home-tab" data-tab="info">&#128197; Trip info</button>
+        <button class="home-tab ${state.homeTab==="tracker"?"active":""}" data-action="home-tab" data-tab="tracker">&#11088; Tracker</button>
       </div>
 
       ${state.homeTab==="colleges" ? `
-        <div class="section-header">&#128196; Pre-trip forms</div>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeyftsd0eVGhflDvvrIdp9FMNS3MDt443gumAmzi3gyBnQBPw/viewform" target="_blank" style="text-decoration:none;display:block;margin-bottom:16px;">
-          <div style="background:var(--orange);color:#fff;border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;gap:12px;font-family:var(--font);">
-            <span style="font-size:20px;">&#128196;</span>
-            <div>
-              <div style="font-size:15px;font-weight:800;letter-spacing:0.02em;">Complete pre-trip forms</div>
-              <div style="font-size:12px;opacity:0.85;margin-top:2px;font-weight:400;">Required before departure &middot; Opens in browser</div>
-            </div>
-            <span style="margin-left:auto;font-size:18px;opacity:0.8;">&#8599;</span>
-          </div>
-        </a>
         <div class="section-header">&#127979; Our colleges</div>
-        ${renderCampusCards()}
+        <div class="campus-cards-grid">${renderCampusCards()}</div>
       ` : ""}
 
       ${state.homeTab==="tracker" ? `
@@ -347,6 +360,24 @@ function renderHome(){
           <button class="btn-primary" data-action="go-fellow" style="margin-bottom:0;">Go to my page</button>
         </div>
         <div class="pm-link"><button class="pm-link-btn" data-action="go-pm-auth">Program Manager access</button></div>
+      ` : ""}
+
+      ${state.homeTab==="recap" ? `
+        <div class="section-header">&#127908; Meeting slideshow</div>
+        <div class="slides-embed">
+          <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTmVZ7e7OevFcn2oYbYiuYRhpvZqVD_QaCjAzb5IRiAn-3-N7IQL0jKW0gXwRjBo-Ygj5vprzKaxTz2/pubembed?start=false&loop=false&delayms=3000" allowfullscreen mozallowfullscreen webkitallowfullscreen></iframe>
+        </div>
+        <div class="section-header">&#128196; Pre-trip forms</div>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeyftsd0eVGhflDvvrIdp9FMNS3MDt443gumAmzi3gyBnQBPw/viewform" target="_blank" style="text-decoration:none;display:block;margin-bottom:16px;">
+          <div style="background:var(--orange);color:#fff;border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;gap:12px;font-family:var(--font);">
+            <span style="font-size:20px;">&#128196;</span>
+            <div>
+              <div style="font-size:15px;font-weight:800;letter-spacing:0.02em;">Complete pre-trip forms</div>
+              <div style="font-size:12px;opacity:0.85;margin-top:2px;font-weight:400;">Required before departure &middot; Opens in browser</div>
+            </div>
+            <span style="margin-left:auto;font-size:18px;opacity:0.8;">&#8599;</span>
+          </div>
+        </a>
       ` : ""}
 
       ${state.homeTab==="info" ? renderInfoTab() : ""}
