@@ -440,6 +440,40 @@ function renderFellowPage(){
     <div class="screen">
       <div class="hero-card"><div class="hero-points">${f.points}</div><div class="hero-points-label">BRYC points earned</div></div>
       <button class="btn-primary" data-action="go-submit-prefilled" data-id="${f.id}">Submit a reflection</button>
+      <div class="section-header">&#128247; Photo submission</div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:10px;">Earn 5 pts per approved photo</div>
+        <div style="font-size:13px;color:var(--gray-600);line-height:1.6;margin-bottom:12px;font-weight:400;">
+          For your photo to be approved it must:
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--gray-600);">
+            <span style="color:var(--orange);font-weight:800;flex-shrink:0;">&#10003;</span>Be clear -- no blurry, dark, or low-quality shots
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--gray-600);">
+            <span style="color:var(--orange);font-weight:800;flex-shrink:0;">&#10003;</span>Show your face -- visible and recognizable
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--gray-600);">
+            <span style="color:var(--orange);font-weight:800;flex-shrink:0;">&#10003;</span>Smile -- good energy only
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--gray-600);">
+            <span style="color:var(--orange);font-weight:800;flex-shrink:0;">&#10003;</span>Pose in front of something recognizable -- a campus sign, building, or landmark
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--gray-600);">
+            <span style="color:var(--orange);font-weight:800;flex-shrink:0;">&#10003;</span>One photo per campus -- make it count
+          </div>
+        </div>
+        <a href="https://forms.gle/tYWvt8qxpMYYu2km8" target="_blank" style="text-decoration:none;display:block;">
+          <div style="background:var(--orange);color:#fff;border-radius:var(--radius);padding:13px 16px;display:flex;align-items:center;gap:12px;font-family:var(--font);">
+            <span style="font-size:18px;">&#128247;</span>
+            <div>
+              <div style="font-size:15px;font-weight:800;letter-spacing:0.02em;">Submit a photo</div>
+              <div style="font-size:12px;opacity:0.85;margin-top:2px;font-weight:400;">5 pts per approved photo &middot; Opens in browser</div>
+            </div>
+            <span style="margin-left:auto;font-size:18px;opacity:0.8;">&#8599;</span>
+          </div>
+        </a>
+      </div>
       <div class="section-header">Points log</div>${logHTML}${reflHTML}
     </div>`;
 }
