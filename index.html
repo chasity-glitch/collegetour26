@@ -435,7 +435,6 @@ function renderFellowPage(){
     const ro=RATINGS.find(x=>x.value===r.rating);
     return `<div class="card"><div class="row-between" style="margin-bottom:8px;"><div style="font-size:15px;font-weight:700;">${r.campus}</div><span class="badge ${cls}">${lbl}</span></div><div class="divider"></div><div class="refl-field-label">Notes</div><div class="refl-field-value">${r.notes}</div>${ro?`<div class="refl-field-label">Campus vibe</div><div class="refl-rating">${ro.emoji} <span style="font-size:14px;">${ro.label}</span></div><div class="refl-field-label">What made you feel that way</div><div class="refl-field-value">${r.vibeText}</div>`:""}<div class="refl-field-label">Key takeaway</div><div class="refl-field-value">${r.takeaway}</div>${r.questionText?`<div class="refl-field-label">Question asked</div><div class="refl-field-value">${r.questionText}</div>`:""}<div style="font-size:11px;color:var(--gray-400);margin-top:4px;">Submitted at ${r.ts}</div></div>`;
   }).join("")}`;
-  const fid=f.id;
   return `
     <div class="top-bar"><div class="row"><button class="top-bar-back" data-action="go-home">&#8592; Back</button><div><div class="top-bar-title">${f.name}</div><div class="top-bar-sub">BRYC College Tour</div></div></div></div>
     <div class="screen">
@@ -464,7 +463,7 @@ function renderFellowPage(){
           All reflections are reviewed by your chaperones before points are finalized. Incomplete or low-effort submissions will be flagged and returned.
         </div>
       </div>
-      <button class="btn-primary" onclick="setState({view:'submit',submitFellowId:'${fid}',submitCampus:'',submitNotes:'',submitRating:'',submitVibeText:'',submitTakeaway:'',submitAskedQ:false,submitQuestionText:'',submitError:'',_fromFellowId:${fid}})">Submit a reflection</button>
+      <button class="btn-primary" data-action="go-submit-prefilled" data-id="${f.id}">Submit a reflection</button>
 
       <div class="section-header">&#128247; Photo submission</div>
       <div class="card">
