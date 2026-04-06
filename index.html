@@ -310,12 +310,24 @@ const RATINGS=[{value:"not-for-me",emoji:"😐",label:"Not for me"},{value:"mayb
 const POINTS={reflection:20,question:15,notes_max:20,bonus_max:25};
 const PM_CATEGORIES=[{key:"notes",label:"Notes quality",max:POINTS.notes_max},{key:"bonus",label:"Bonus / exceptional engagement",max:POINTS.bonus_max}];
 const PM_PASSWORD="HTXbryc";
+const API="https://script.google.com/macros/s/AKfycbw4AmQE3U4UbwclXWjCfnW7jciyhLcxtiul0w0IBeePfQ_ledr2DJDDSslv4CPmNRel/exec";
 
-let state={fellows:FELLOWS_LIST.map((name,i)=>({id:i+1,name,points:0,log:[],reflections:[]})),view:"home",homeTab:"recap",selectedId:null,pmTab:"fellows",awardingId:null,awardCat:"notes",awardPts:10,awardCampus:CAMPUSES[0],awardNote:"",pmSuccess:"",pmError:"",pmPasswordInput:"",submitFellowId:"",submitCampus:"",submitNotes:"",submitRating:"",submitVibeText:"",submitTakeaway:"",submitAskedQ:false,submitQuestionText:"",submitError:"",_fromFellowId:null,_lastAskedQ:false,_lastSubmittedFellowId:null,_homeFellowId:""};
+async function api(body){
+  try{
+    const r=await fetch(API,{method:"POST",body:JSON.stringify(body)});
+    return await r.json();
+  }catch(e){console.error("API error",e);return null;}
+}
+
+let state={fellows:FELLOWS_LIST.map((name,i)=>({id:i+1,name,points:0,log:[],reflections:[]})),view:"home",homeTab:"recap",selectedId:null,pmViewingFellowId:null,pmTab:"fellows",awardingId:null,awardCat:"notes",awardPts:10,awardCampus:CAMPUSES[0],awardNote:"",pmSuccess:"",pmError:"",pmPasswordInput:"",submitFellowId:"",submitCampus:"",submitNotes:"",submitRating:"",submitVibeText:"",submitTakeaway:"",submitAskedQ:false,submitQuestionText:"",submitError:"",_fromFellowId:null,_lastAskedQ:false,_lastSubmittedFellowId:null,_homeFellowId:""};
 
 function setState(u){Object.assign(state,u);render();}
-function awardPoints(fid,pts,category,campus,note,auto){const f=state.fellows.find(x=>x.id===fid);if(!f)return;f.points+=pts;f.log.unshift({pts,category,campus,note,auto,ts:new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})});}
-function addReflection(fid,data){const f=state.fellows.find(x=>x.id===fid);if(!f)return;f.reflections.unshift({...data,status:"pending",ts:new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})});}
+
+function showLoading(msg){
+  document.getElementById("app").innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;padding:32px;"><div style="width:36px;height:36px;border:3px solid var(--orange-light);border-top-color:var(--orange);border-radius:50%;animation:spin 0.8s linear infinite;"></div><div style="font-family:var(--font);font-size:14px;color:var(--gray-400);">${msg||"Loading..."}</div></div><style>@keyframes spin{to{transform:rotate(360deg);}}</style>`;
+}
+function awardPoints(fid,pts,category,campus,note,auto){const f=state.fellows.find(x=>x.id===fid);if(!f)return;const ts=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});f.points+=pts;f.log.unshift({pts,category,campus,note,auto,ts});api({action:"savePoints",fellowId:fid,pts,category,campus:campus||"",note:note||"",auto,ts});}
+function addReflection(fid,data){const f=state.fellows.find(x=>x.id===fid);if(!f)return;const ts=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});f.reflections.unshift({...data,status:"pending",ts});api({action:"saveReflection",fellowId:fid,...data,ts});}
 
 function render(){
   const app=document.getElementById("app");
@@ -325,7 +337,28 @@ function render(){
   else if(state.view==="submit-done")app.innerHTML=renderSubmitDone();
   else if(state.view==="pm-auth")app.innerHTML=renderPMAuth();
   else if(state.view==="pm")app.innerHTML=renderPM();
+  else if(state.view==="pm-fellow")app.innerHTML=renderPMFellowPage();
   bindEvents();
+}
+
+async function initApp(){
+  showLoading("Loading tour data...");
+  // First make sure all fellows exist in the sheet
+  await api({action:"initFellows",fellows:state.fellows.map(f=>({id:f.id,name:f.name}))});
+  // Then load all data
+  const data=await api({action:"load"});
+  if(data&&data.fellows&&data.fellows.length>0){
+    // Merge sheet data into state -- preserve names from FELLOWS_LIST
+    data.fellows.forEach(sheetFellow=>{
+      const local=state.fellows.find(f=>f.id===sheetFellow.id);
+      if(local){
+        local.points=sheetFellow.points||0;
+        local.log=sheetFellow.log||[];
+        local.reflections=sheetFellow.reflections||[];
+      }
+    });
+  }
+  render();
 }
 
 function renderCampusCards(){
@@ -549,6 +582,29 @@ function renderPMAuth(){
     </div>`;
 }
 
+function renderPMFellowPage(){
+  const f=state.fellows.find(x=>x.id===state.pmViewingFellowId);if(!f)return"";
+  const logHTML=f.log.length===0
+    ?`<div class="card" style="color:var(--gray-400);font-size:14px;text-align:center;padding:20px;">No points yet.</div>`
+    :f.log.map((entry,idx)=>`<div class="card"><div class="log-entry"><div><div class="log-pts">+${entry.pts} pts</div><div class="log-cat">${entry.category}</div>${entry.campus?`<div class="log-campus">${entry.campus}</div>`:""}</div><div class="log-right"><span class="badge ${entry.auto?"badge-auto":"badge-pm"}">${entry.auto?"Auto":"Chaperone"}</span><span style="font-size:11px;color:var(--gray-400);">${entry.ts}</span>${!entry.auto?`<button class="btn-sm-red" style="margin-top:4px;font-size:11px;padding:4px 8px;" data-action="remove-points" data-fellow="${f.id}" data-idx="${idx}">Remove</button>`:""}</div></div></div>`).join("");
+  const reflHTML=f.reflections.length===0?"":f.reflections.map((r,i)=>{
+    const cls=r.status==="approved"?"badge-approved":r.status==="flagged"?"badge-flagged":"badge-pending";
+    const lbl=r.status==="approved"?"Approved":r.status==="flagged"?"Flagged":"Pending review";
+    const ro=RATINGS.find(x=>x.value===r.rating);
+    return `<div class="card"><div class="row-between" style="margin-bottom:8px;"><div style="font-size:15px;font-weight:700;">${r.campus}</div><span class="badge ${cls}">${lbl}</span></div><div class="divider"></div><div class="refl-field-label">Notes</div><div class="refl-field-value">${r.notes}</div>${ro?`<div class="refl-field-label">Campus vibe</div><div class="refl-rating">${ro.emoji} <span style="font-size:14px;">${ro.label}</span></div><div class="refl-field-label">What made them feel that way</div><div class="refl-field-value">${r.vibeText}</div>`:""}<div class="refl-field-label">Key takeaway</div><div class="refl-field-value">${r.takeaway}</div>${r.questionText?`<div class="refl-field-label">Question asked</div><div class="refl-field-value">${r.questionText}</div>`:""}<div style="font-size:11px;color:var(--gray-400);margin-top:4px;">Submitted at ${r.ts}</div><div class="btn-pair" style="margin-top:10px;"><button class="btn-sm" data-action="approve-refl" data-fellow="${f.id}" data-idx="${i}">Approve</button><button class="btn-sm-red" data-action="flag-refl" data-fellow="${f.id}" data-idx="${i}">Flag</button></div></div>`;
+  }).join("");
+  return `
+    <div class="top-bar"><div class="row"><button class="top-bar-back" data-action="go-pm">&#8592; Dashboard</button><div><div class="top-bar-title">${f.name}</div><div class="top-bar-sub">${f.points} pts total</div></div></div></div>
+    <div class="screen">
+      ${state.pmSuccess?`<div class="notice notice-orange">${state.pmSuccess}</div>`:""}
+      <div class="hero-card"><div class="hero-points">${f.points}</div><div class="hero-points-label">BRYC points earned</div></div>
+      <div class="section-header">Points log</div>
+      <div style="font-size:12px;color:var(--gray-400);margin-bottom:10px;font-family:var(--font);">Chaperone-awarded points can be removed. Auto-awarded points cannot.</div>
+      ${logHTML}
+      ${f.reflections.length>0?`<div class="section-header">Reflections</div>${reflHTML}`:""}
+    </div>`;
+}
+
 function renderPM(){
   const sorted=[...state.fellows].sort((a,b)=>b.points-a.points);
   const pending=state.fellows.flatMap(f=>f.reflections.map((r,i)=>({...r,fellowId:f.id,fellowName:f.name,refIdx:i}))).filter(r=>r.status==="pending");
@@ -608,6 +664,20 @@ function handleAction(e){
   const el=e.currentTarget,action=el.dataset.action;
   if(action==="go-home")setState({view:"home",selectedId:null,submitError:"",awardingId:null,pmSuccess:"",_homeFellowId:""});
   if(action==="go-pm-auth")setState({view:"pm-auth",pmPasswordInput:"",pmError:""});
+  if(action==="go-pm")setState({view:"pm",pmViewingFellowId:null});
+  if(action==="pm-view-fellow"){const id=Number(el.dataset.id);setState({view:"pm-fellow",pmViewingFellowId:id,pmSuccess:""});}
+  if(action==="remove-points"){
+    const fid=Number(el.dataset.fellow),idx=Number(el.dataset.idx);
+    const fellow=state.fellows.find(f=>f.id===fid);
+    if(fellow&&fellow.log[idx]&&!fellow.log[idx].auto){
+      const pts=fellow.log[idx].pts;
+      api({action:"removePoints",fellowId:fid,pts,logIndex:idx});
+      fellow.points=Math.max(0,fellow.points-pts);
+      fellow.log.splice(idx,1);
+      setState({pmSuccess:`Removed ${pts} pts from ${fellow.name}.`});
+      setTimeout(()=>{state.pmSuccess="";render();},3000);
+    }
+  }
   if(action==="submit-pm-auth")handlePMAuth();
   if(action==="pm-tab")setState({pmTab:el.dataset.tab});
   if(action==="home-tab")setState({homeTab:el.dataset.tab});
@@ -642,13 +712,19 @@ function handleAction(e){
   if(action==="approve-refl"){
     const fid=Number(el.dataset.fellow),idx=Number(el.dataset.idx),fellow=state.fellows.find(f=>f.id===fid);
     fellow.reflections[idx].status="approved";
+    api({action:"updateReflectionStatus",fellowId:fid,reflIndex:idx,status:"approved"});
     setState({pmSuccess:`Reflection approved for ${fellow.name}.`});
     setTimeout(()=>{state.pmSuccess="";render();},3000);
   }
-  if(action==="flag-refl"){const fid=Number(el.dataset.fellow),idx=Number(el.dataset.idx);state.fellows.find(f=>f.id===fid).reflections[idx].status="flagged";render();}
+  if(action==="flag-refl"){
+    const fid=Number(el.dataset.fellow),idx=Number(el.dataset.idx);
+    state.fellows.find(f=>f.id===fid).reflections[idx].status="flagged";
+    api({action:"updateReflectionStatus",fellowId:fid,reflIndex:idx,status:"flagged"});
+    render();
+  }
 }
 
-render();
+initApp();
 </script>
 </body>
 </html>
