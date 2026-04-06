@@ -435,60 +435,6 @@ function renderFellowPage(){
     const ro=RATINGS.find(x=>x.value===r.rating);
     return `<div class="card"><div class="row-between" style="margin-bottom:8px;"><div style="font-size:15px;font-weight:700;">${r.campus}</div><span class="badge ${cls}">${lbl}</span></div><div class="divider"></div><div class="refl-field-label">Notes</div><div class="refl-field-value">${r.notes}</div>${ro?`<div class="refl-field-label">Campus vibe</div><div class="refl-rating">${ro.emoji} <span style="font-size:14px;">${ro.label}</span></div><div class="refl-field-label">What made you feel that way</div><div class="refl-field-value">${r.vibeText}</div>`:""}<div class="refl-field-label">Key takeaway</div><div class="refl-field-value">${r.takeaway}</div>${r.questionText?`<div class="refl-field-label">Question asked</div><div class="refl-field-value">${r.questionText}</div>`:""}<div style="font-size:11px;color:var(--gray-400);margin-top:4px;">Submitted at ${r.ts}</div></div>`;
   }).join("")}`;
-  return `
-    <div class="top-bar"><div class="row"><button class="top-bar-back" data-action="go-home">&#8592; Back</button><div><div class="top-bar-title">${f.name}</div><div class="top-bar-sub">BRYC College Tour</div></div></div></div>
-    <div class="screen">
-      <div class="hero-card"><div class="hero-points">${f.points}</div><div class="hero-points-label">BRYC points earned</div></div>
-      <button class="btn-primary" data-action="go-submit-prefilled" data-id="${f.id}">Submit a reflection</button>
-      <div class="section-header">&#128247; Photo submission</div>
-      <div class="card">
-        <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:10px;">Earn 10 pts per approved photo</div>
-        <div style="font-size:13px;color:var(--gray-600);line-height:1.6;margin-bottom:12px;font-weight:400;">
-          For your photo to be approved it must:
-        </div>
-        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px;">
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--gray-600);">
-            <span style="color:var(--orange);font-weight:800;flex-shrink:0;">&#10003;</span>Be clear -- no blurry, dark, or low-quality shots
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--gray-600);">
-            <span style="color:var(--orange);font-weight:800;flex-shrink:0;">&#10003;</span>Show your face -- visible and recognizable
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--gray-600);">
-            <span style="color:var(--orange);font-weight:800;flex-shrink:0;">&#10003;</span>Smile -- good energy only
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--gray-600);">
-            <span style="color:var(--orange);font-weight:800;flex-shrink:0;">&#10003;</span>Pose in front of something recognizable -- a campus sign, building, or landmark
-          </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--gray-600);">
-            <span style="color:var(--orange);font-weight:800;flex-shrink:0;">&#10003;</span>One photo per campus -- make it count
-          </div>
-        </div>
-        <a href="https://forms.gle/tYWvt8qxpMYYu2km8" target="_blank" style="text-decoration:none;display:block;">
-          <div style="background:var(--orange);color:#fff;border-radius:var(--radius);padding:13px 16px;display:flex;align-items:center;gap:12px;font-family:var(--font);">
-            <span style="font-size:18px;">&#128247;</span>
-            <div>
-              <div style="font-size:15px;font-weight:800;letter-spacing:0.02em;">Submit a photo</div>
-              <div style="font-size:12px;opacity:0.85;margin-top:2px;font-weight:400;">5 pts per approved photo &middot; Opens in browser</div>
-            </div>
-            <span style="margin-left:auto;font-size:18px;opacity:0.8;">&#8599;</span>
-          </div>
-        </a>
-      </div>
-      <div class="section-header">Points log</div>${logHTML}${reflHTML}
-    </div>`;
-}
-
-function renderFellowPage(){
-  const f=state.fellows.find(x=>x.id===state.selectedId);if(!f)return"";
-  const logHTML=f.log.length===0
-    ?`<div class="card" style="color:var(--gray-400);font-size:14px;text-align:center;padding:20px;">No points yet -- submit a reflection to get started!</div>`
-    :f.log.map(entry=>`<div class="card"><div class="log-entry"><div><div class="log-pts">+${entry.pts} pts</div><div class="log-cat">${entry.category}</div>${entry.campus?`<div class="log-campus">${entry.campus}</div>`:""}</div><div class="log-right"><span class="badge ${entry.auto?"badge-auto":"badge-pm"}">${entry.auto?"Auto":"PM"}</span><span style="font-size:11px;color:var(--gray-400);">${entry.ts}</span></div></div></div>`).join("");
-  const reflHTML=f.reflections.length===0?"":` <div class="section-header">My reflections</div>${f.reflections.map(r=>{
-    const cls=r.status==="approved"?"badge-approved":r.status==="flagged"?"badge-flagged":"badge-pending";
-    const lbl=r.status==="approved"?"Approved":r.status==="flagged"?"Flagged":"Pending review";
-    const ro=RATINGS.find(x=>x.value===r.rating);
-    return `<div class="card"><div class="row-between" style="margin-bottom:8px;"><div style="font-size:15px;font-weight:700;">${r.campus}</div><span class="badge ${cls}">${lbl}</span></div><div class="divider"></div><div class="refl-field-label">Notes</div><div class="refl-field-value">${r.notes}</div>${ro?`<div class="refl-field-label">Campus vibe</div><div class="refl-rating">${ro.emoji} <span style="font-size:14px;">${ro.label}</span></div><div class="refl-field-label">What made you feel that way</div><div class="refl-field-value">${r.vibeText}</div>`:""}<div class="refl-field-label">Key takeaway</div><div class="refl-field-value">${r.takeaway}</div>${r.questionText?`<div class="refl-field-label">Question asked</div><div class="refl-field-value">${r.questionText}</div>`:""}<div style="font-size:11px;color:var(--gray-400);margin-top:4px;">Submitted at ${r.ts}</div></div>`;
-  }).join("")}`;
   const fid=f.id;
   return `
     <div class="top-bar"><div class="row"><button class="top-bar-back" data-action="go-home">&#8592; Back</button><div><div class="top-bar-title">${f.name}</div><div class="top-bar-sub">BRYC College Tour</div></div></div></div>
@@ -540,6 +486,37 @@ function renderFellowPage(){
       </div>
 
       <div class="section-header">Points log</div>${logHTML}${reflHTML}
+    </div>`;
+}
+
+function renderSubmit(){
+  const autoTotal=POINTS.reflection+(state.submitAskedQ?POINTS.question:0);
+  return `
+    <div class="top-bar"><div class="row"><button class="top-bar-back" data-action="go-back-from-submit">&#8592; Back</button><div class="top-bar-title">Submit a reflection</div></div></div>
+    <div class="screen">
+      ${state.submitError?`<div class="notice notice-red">${state.submitError}</div>`:""}
+      <div class="card">
+        <label class="field-label">Your name</label>
+        <select id="sub-fellow"><option value="">Select your name...</option>${state.fellows.map(f=>`<option value="${f.id}" ${state.submitFellowId==f.id?"selected":""}>${f.name}</option>`).join("")}</select>
+        <label class="field-label">Campus visited</label>
+        <select id="sub-campus"><option value="">Select a campus...</option>${CAMPUSES.map(c=>`<option value="${c}" ${state.submitCampus===c?"selected":""}>${c}</option>`).join("")}</select>
+      </div>
+      <div class="card"><label class="field-label">Your notes from the tour</label><textarea id="sub-notes" style="margin-bottom:0;" placeholder="What did you see, hear, or learn on this tour?">${state.submitNotes}</textarea></div>
+      <div class="card">
+        <label class="field-label">How do you feel about this campus?</label>
+        <div class="emoji-row">${RATINGS.map(r=>`<div class="emoji-option ${state.submitRating===r.value?"selected":""}" data-action="set-rating" data-value="${r.value}"><div class="emoji-glyph">${r.emoji}</div><div class="emoji-label">${r.label}</div></div>`).join("")}</div>
+        <label class="field-label">Tell us about what made you feel that way</label>
+        <textarea id="sub-vibe" style="margin-bottom:0;" placeholder="What stood out to you? What felt right or off?">${state.submitVibeText}</textarea>
+      </div>
+      <div class="card"><label class="field-label">One key takeaway</label><textarea id="sub-takeaway" style="min-height:70px;margin-bottom:0;" placeholder="What's the most important thing you're taking away from this visit?">${state.submitTakeaway}</textarea></div>
+      <div class="checkbox-row" data-action="toggle-question">
+        <div class="checkbox-box ${state.submitAskedQ?"checked":""}">${state.submitAskedQ?'<span class="checkbox-check">&#10003;</span>':""}</div>
+        <div style="flex:1;"><div class="checkbox-label">I asked a question on this tour</div><div class="checkbox-sub">+${POINTS.question} pts awarded automatically</div></div>
+      </div>
+      ${state.submitAskedQ?`<div class="card"><label class="field-label">What was your question?</label><textarea id="sub-question" style="min-height:60px;margin-bottom:0;" placeholder="Write out the question you asked...">${state.submitQuestionText}</textarea></div>`:""}
+      <div class="points-preview"><div class="points-preview-label">Points you'll earn</div><div class="points-preview-value">+${autoTotal} pts</div></div>
+      <button class="btn-primary" data-action="submit-reflection">Submit reflection</button>
+      <button class="btn-secondary" data-action="go-back-from-submit">Cancel</button>
     </div>`;
 }
 
